@@ -98,6 +98,11 @@ button {
     margin: 5px;
 }
 
+.empty {
+    color: #777;
+    text-align: center;
+}
+
 .navigation {
     display: flex;
     justify-content: center;

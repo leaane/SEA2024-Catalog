@@ -58,12 +58,12 @@ let city = [
 let address = [
     "100 Aquarium Way, Dock #2", "1801-1945 Veranada Ave", "1901 Spinnaker Drive", "100 Universal City Plaza",
     "480 Airport Rd", "1151 Oxford Rd", "100 Aquarium Way", "400 S Baldwin Ave",
-    "610 E Hwy 246", "200 Santa Monica Pier", "429 W Garvey Ave"
+    "610 E Hwy 246", "200 Santa Monica Pier", "429 W Garvey Ave", "1416 S Azusa Ave #C2"
 ];
 
 let zipcode = [
     "90802", "91001", "93001", "91608", "92058", "91108", "90802", "91007",
-    "93464", "90401", "91754"
+    "93464", "90401", "91754", "91791"
 ];
 
 let type = [
@@ -79,41 +79,34 @@ let items = titles.map((title, index) => ({
     city: city[index],
     zipcode: zipcode[index],
     address: address[index],
-    type: type[index]
+    type: type[index],
+    add: false
 }));
-
-let saves = []; 
-
 
 
 let currentDisplayedCount = 8; 
 
-function showCards(count) {
+function showCards(dataArray, count) {
     const cardContainer = document.getElementById("card-container");
     cardContainer.innerHTML = "";
     const templateCard = document.querySelector(".card");
 
     // Determine the range of data to display based on the count
-    const endIndex = Math.min(count, titles.length);
+    const endIndex = Math.min(count, dataArray.length);
 
     for (let i = 0; i < endIndex; i++) {      
         const nextCard = templateCard.cloneNode(true);
-        editCardContent(nextCard, items[i].title, items[i].url, items[i].description, items[i].address, items[i].city);
+        editCardContent(nextCard, dataArray[i].title, dataArray[i].url, dataArray[i].description, dataArray[i].address, dataArray[i].city);
         cardContainer.appendChild(nextCard);
     }
 
     // If there are more items to show, display the "Show more" link
-    if (endIndex < titles.length) {
+    if (endIndex < dataArray.length) {
         document.getElementById('show-more-link').style.display = 'block';
     } else {
         document.getElementById('show-more-link').style.display = 'none';
     }
 }
-
-// Show the initial set of cards
-document.addEventListener("DOMContentLoaded", () => {
-    showCards(currentDisplayedCount);
-});
 
 function editCardContent(card, newTitle, newImageURL, newDescription, newAddress, newCity) {
     card.style.display = "block";
@@ -132,49 +125,62 @@ function editCardContent(card, newTitle, newImageURL, newDescription, newAddress
     addressElement.textContent = newAddress + ", " + newCity + ", CA";
 }
 
+// Show the initial set of cards
+document.addEventListener("DOMContentLoaded", () => {
+    showCards(items, currentDisplayedCount);
+});
+
 // Event listener for the "Show more" link
 document.getElementById('show-more-link').addEventListener('click', (event) => {
     event.preventDefault(); // Prevent the default action of the anchor tag
     currentDisplayedCount += 8; // Increase the count by 8
-    showCards(currentDisplayedCount); // Show more cards
+    showCards(items, currentDisplayedCount); // Show more cards
 });
-
-function filterItems(filter) {
-    if (filter === "all") {
-        showCards(currentDisplayedCount); // Display all items
-    } else {
-        const filteredItems = items.filter(item => item.type === filter);
-        showFilteredCards(filteredItems); // Display filtered items
-    }
-    toggleShowMoreButton(); // Toggle visibility of "Show more" button
-}
-
-function toggleShowMoreButton() {
-    const showMoreButton = document.getElementById('show-more-link');
-    if (document.getElementById('filter-dropdown').value === 'all' && currentDisplayedCount < items.length) {
-        showMoreButton.style.display = 'block';
-    } else {
-        showMoreButton.style.display = 'none';
-    }
-}
-
-function showFilteredCards(filteredItems) {
-    const cardContainer = document.getElementById("card-container");
-    cardContainer.innerHTML = ""; // Clear previous cards
-
-    filteredItems.forEach(item => {
-        const nextCard = document.querySelector(".card").cloneNode(true);
-        editCardContent(nextCard, item.title, item.url, item.description, item.address, item.city);
-        cardContainer.appendChild(nextCard);
-    });
-}
 
 // Event listener for filter dropdown change
 document.getElementById('filter-dropdown').addEventListener('change', (event) => {
     const selectedOption = event.target.value;
-    console.log(`Dropdown selection changed to: ${selectedOption}`);
-    filterItems(selectedOption);
+    const zipcodeFilter = document.getElementById('zipcode-search').value.trim();
+    filterItems(selectedOption, zipcodeFilter);
 });
+
+// Event listener for zipcode search
+document.getElementById('zipcode-search').addEventListener('input', (event) => {
+    const zipcodeInput = event.target.value.trim();
+    const selectedOption = document.getElementById('filter-dropdown').value;
+    filterItems(selectedOption, zipcodeInput);
+});
+
+
+// Filter
+function filterItems(filter, zipcodeFilter) {
+    let filteredItems = items;
+
+    if (filter !== "all") {
+        filteredItems = filteredItems.filter(item => item.type === filter);
+    }
+
+    if (zipcodeFilter && Number.isInteger(parseInt(zipcodeFilter))) {
+        filteredItems = filteredItems.filter(item => item.zipcode === zipcodeFilter);
+    }
+
+    if (filteredItems.length > 0) {
+        showCards(filteredItems, filteredItems.length);
+    } else {
+        showCards(filteredItems, filteredItems.length);
+        showNoRecommendationsMessage();
+    }
+}
+
+// Function to display a message when there are no recommendations
+function showNoRecommendationsMessage() {
+    const cardContainer = document.getElementById("card-container");
+    cardContainer.innerHTML = ""; // Clear previous cards
+
+    const emptyDiv = document.querySelector(".empty").cloneNode(true);
+    emptyDiv.style.display = 'block';
+    cardContainer.appendChild(emptyDiv);
+}
 
 function addToList(button) {
     if (!button.classList.contains('blue-plus')) {
@@ -186,11 +192,7 @@ function addToList(button) {
     }
 }
 
-
-
-
-
-/* -------------  Autoscroll -------------- */
+// Autoscroll
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
