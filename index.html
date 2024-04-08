@@ -1,39 +1,57 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>LA TV Shows | Home</title>
-    <meta name="description" content="A Catalog of Shows Set in Los Angeles">
-    <link rel="stylesheet" href="style.css" />
-    <script type="text/javascript" src="scripts.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="Waves.png">
+    <title>Travel California</title>
+    <meta name="description" content="Let's find your next destination!">
+    <link rel="stylesheet" href="css-reset.css"/>
+    <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
+    <section id = "top"></section>
     <header class="main-header">
-        <h1 class="title">LA TV Shows</h1>
+        <div class="saves"><a href="saves.html">My Saves</a></div>
+        <h1><a href="index.html">Travel California</h1></a>
+
+        <div class="filters" style="margin-top: 50px;">
+            <select id="filter-dropdown">
+                <option value="all">Filter by: </option>
+                <option value="f">Food & Drinks</option>
+                <option value="o">Outdoor Activities</option>
+                <option value="i">Indoor Activities</option>
+            </select>
+            <input type="text" id="zipcode-search" placeholder="Search by Zip Code">
+        </div>
     </header>
-    <div id="card-container">
-        
-    </div>
+
+    <div id="card-container"></div>
     <div class="card" style="display: none;">
         <div class="card-content">
-            <h2>TV Show Title</h2>
-            <img src="" alt="TV Show Poster">
+            <img src="" alt="">
+            <div class="title-container"><h2>Title</h2><span><button onclick="addToList(this)">+</button></span></div>
             <ul>
-                <li>Bullet Point 1</li>
-                <li>Bullet Point 2</li>
-                <li>Bullet Point 3</li>
+                <li>Description</li>
+                <li>Address</li>
             </ul>
+            </div>
         </div>
     </div>
-    <div class="footer">
-        <button onclick="quoteAlert();">
-            Get A Quote!
-        </button>
-        <button onclick="removeLastCard();">
-            Remove A Card!
-        </button>
-    </div>
-</body>
 
+    <div class="empty" style="display: none;">
+        <img src="IMG_7369.jpg" alt="sad">
+        <p>No recommendations yet :c</p>
+    </div>
+
+    <div class="navigation">
+        <a href="#" id="show-more-link">Show more?</a>
+        <a href="#top">Back to Top</a>
+    </div>
+
+    <footer></footer>
+
+    <script src="scripts.js"></script>
+</body>
 </html>
