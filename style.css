@@ -9,14 +9,14 @@ a {
     color: white;
 }
 
-.saves {
+.favorites {
     position: relative;
     top: 10px;
     margin-right: 15px;
     text-align: right;
 }
 
-.saves a:hover {
+.favorites a:hover {
     color: rgb(162, 209, 224); 
 }
 
@@ -34,7 +34,22 @@ h1 {
     text-align: center;
     align-items: center;
     font-size: 8em;
-    font-weight: normal;
+    font-weight: bold;
+}
+
+#filter-dropdown {
+    height: 25px;
+    border-radius: 5px;
+    color: #666;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#zipcode-search {
+    height: 20px;
+    border-radius: 5px;
+    color: #666;
+    border: 1px #666 solid;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 #card-container {
@@ -50,7 +65,6 @@ h1 {
     max-width: 300px;
 }
 
-
 .card-content h2 {
     margin-top: 0;
     font-size: 20px;
@@ -63,14 +77,13 @@ h1 {
 }
 
 .card-content ul li:not(:first-child) {
-    margin-top: 10px; /* Adjust this value as needed */
+    margin-top: 10px; 
 }
-
 
 .title-container {
     display: flex;
-    justify-content: space-between; /* Align items with space between */
-    align-items: center; /* Align items vertically */
+    justify-content: space-between; 
+    align-items: center; 
 }
 
 .card-content button:hover {
@@ -81,7 +94,7 @@ h1 {
     background-color: rgb(162, 209, 224, 0.5);
 }
 
-.blue-plus {
+.favorited {
     background-color: rgb(87, 161, 185);
 }
 
@@ -93,7 +106,7 @@ button {
     width: 25px;
     border-radius: 10px;
     color: white;
-    font-size: 20px;
+    font-size: 14px;
     cursor: pointer;
     margin: 5px;
 }
@@ -103,11 +116,17 @@ button {
     text-align: center;
 }
 
+.empty-favorites {
+    color: #777;
+    text-align: center;
+}
+
 .navigation {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 15px;
+    margin-top: 80px;
 }
 
 .navigation a {

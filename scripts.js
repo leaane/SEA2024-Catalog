@@ -2,7 +2,7 @@ let titles = [
     "Whale Watching", "Eaton Canyon", "Channel Islands", "Universal Studios",
     "Go Jump", "Huntington Library", "Aquarium of the Pacific", "Bingsu Bingsu",
     "Ostrich Land", "Santa Monica Pier", "Little Skewer", "Miko's Boba Tea",
-    "Legoland", "Escape Hotel", "Golden Gate Bridge", "Getty Museum",
+    "Legoland", "Escape Hotel", "Golden Gate Bridge", "The Getty Center",
     "Churro Boss", "Joshua Tree", "Big Bear Apline Slide", "Color Me Mine",
     "Joe's Italian Ice", "Switzer Falls", "Laser Land", "Buca di Beppo"
 ];
@@ -46,30 +46,50 @@ let description = [
     "Come see and feed over 100 ostriches and emus",
     "A large pier with a small amusement park, concession stands, and areas for views and fishing",
     "Delicious skewers and appetizers as well as a great atmosphere",
-    "An inexpensive cat cafe conjoined with a pet store supply shop"
+    "An inexpensive cat cafe conjoined with a pet store supply shop",
+    "A vibrant wonderland with towering Lego creations, thrilling rides, and endless adventures",
+    "An entire hotel, where every room is a different escape game, and the staff is dying to check you in",
+    "A breathtaking marvel of engineering suspended against San Francisco's picturesque skyline",
+    "Features works of art dating from the eighth through the twenty-first century",
+    "A haven of fresh, golden churros drizzled with delicious toppings",
+    "Where two distinct desert ecosystems, the Mojave and the Colorado, come together",
+    "Year-round facility that offers winter bobsled tracks and summer water slides",
+    "A paint your own pottery studio that offers painting on ceramics for all ages",
+    "Philadelphia style water ice made daily with real fresh fruit",
+    "This hike takes you along a brook, historic ruins, and to a pristine waterfall",
+    "Team up with friends and family for epic laser tag battles in immersive gameplay",
+    "Serves Italian, family-style meals in an eclectic group-friendly setting, perfect for celebrations"
 ];
 
 let city = [
     "Long Beach", "Altadena","Ventura", "Universal City", 
     "Oceanside", "San Marino", "Long Beach", "Arcadia",
-    "Solvang", "Santa Monica", "Monterey Park", "West Covina"
+    "Solvang", "Santa Monica", "Monterey Park", "West Covina",
+    "Carlsbad", "Los Angeles", "San Francisco", "Los Angeles",
+    "Covina", "Joshua Tree", "Big Bear Lake", "Pasadena",
+    "Anaheim", "Altadena", "West Covina", "Pasadena"
 ];
 
 let address = [
     "100 Aquarium Way, Dock #2", "1801-1945 Veranada Ave", "1901 Spinnaker Drive", "100 Universal City Plaza",
     "480 Airport Rd", "1151 Oxford Rd", "100 Aquarium Way", "400 S Baldwin Ave",
-    "610 E Hwy 246", "200 Santa Monica Pier", "429 W Garvey Ave", "1416 S Azusa Ave #C2"
+    "610 E Hwy 246", "200 Santa Monica Pier", "429 W Garvey Ave", "1416 S Azusa Ave #C2",
+    "One Legoland Dr", "6633 Hollywood Blvd", "Golden Gate Brg", "1200 Getty Center Dr",
+    "117 N Citrus Ave", "6554 Park Boulevard", "800 Wildrose Ln", "81 S Fair Oaks Ave",
+    "2201 S Harbor Blvd", "Switzer Picnic Area", "2340 S Azusa Ave", "80 W Green St"
 ];
 
 let zipcode = [
     "90802", "91001", "93001", "91608", "92058", "91108", "90802", "91007",
-    "93464", "90401", "91754", "91791"
+    "93464", "90401", "91754", "91791", "92008", "90028", "94129", "90049",
+    "91723", "92252", "92315", "91105", "92802", "91001"
 ];
 
 let type = [
     "o", "o", "o", "o", "o", "o", "i", "f",
     "o", "o", "f", "i", "o", "i", "o", "i",
-    "f", "o", "o", "i", "f", "o", "i", "f"
+    "f", "o", "o", "i", "f", "o", "i", "f",
+    
 ];
 
 let items = titles.map((title, index) => ({
@@ -83,6 +103,7 @@ let items = titles.map((title, index) => ({
     add: false
 }));
 
+let saves = [];
 
 let currentDisplayedCount = 8; 
 
@@ -91,24 +112,21 @@ function showCards(dataArray, count) {
     cardContainer.innerHTML = "";
     const templateCard = document.querySelector(".card");
 
-    // Determine the range of data to display based on the count
-    const endIndex = Math.min(count, dataArray.length);
-
-    for (let i = 0; i < endIndex; i++) {      
+    for (let i = 0; i < count; i++) {      
         const nextCard = templateCard.cloneNode(true);
-        editCardContent(nextCard, dataArray[i].title, dataArray[i].url, dataArray[i].description, dataArray[i].address, dataArray[i].city);
+        editCardContent(nextCard, dataArray[i].title, dataArray[i].url, dataArray[i].description, dataArray[i].address, dataArray[i].city, i);
         cardContainer.appendChild(nextCard);
     }
 
     // If there are more items to show, display the "Show more" link
-    if (endIndex < dataArray.length) {
+    if (count < dataArray.length) {
         document.getElementById('show-more-link').style.display = 'block';
     } else {
         document.getElementById('show-more-link').style.display = 'none';
     }
 }
 
-function editCardContent(card, newTitle, newImageURL, newDescription, newAddress, newCity) {
+function editCardContent(card, newTitle, newImageURL, newDescription, newAddress, newCity, index) {
     card.style.display = "block";
 
     const cardHeader = card.querySelector("h2");
@@ -123,6 +141,16 @@ function editCardContent(card, newTitle, newImageURL, newDescription, newAddress
 
     const addressElement = card.querySelector(".card-content ul li:nth-child(2)");
     addressElement.textContent = newAddress + ", " + newCity + ", CA";
+
+    const favoriteButton = card.querySelector("#add");
+    if (items[index].add) {
+        favoriteButton.classList.add('favorited'); // Add .favorited class if the item is saved
+    } else {
+        favoriteButton.classList.remove('favorited');
+    }
+    favoriteButton.onclick = function() {
+        addToList(this, index);
+    };
 }
 
 // Show the initial set of cards
@@ -133,8 +161,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // Event listener for the "Show more" link
 document.getElementById('show-more-link').addEventListener('click', (event) => {
     event.preventDefault(); // Prevent the default action of the anchor tag
-    currentDisplayedCount += 8; // Increase the count by 8
-    showCards(items, currentDisplayedCount); // Show more cards
+    currentDisplayedCount += 8;
+    showCards(items, currentDisplayedCount);
 });
 
 // Event listener for filter dropdown change
@@ -151,7 +179,6 @@ document.getElementById('zipcode-search').addEventListener('input', (event) => {
     filterItems(selectedOption, zipcodeInput);
 });
 
-
 // Filter
 function filterItems(filter, zipcodeFilter) {
     let filteredItems = items;
@@ -161,13 +188,15 @@ function filterItems(filter, zipcodeFilter) {
     }
 
     if (zipcodeFilter && Number.isInteger(parseInt(zipcodeFilter))) {
-        filteredItems = filteredItems.filter(item => item.zipcode === zipcodeFilter);
+        filteredItems = filteredItems.filter(item => {
+            const itemZipFirstThreeDigits = (item.zipcode && item.zipcode.toString().substring(0, 3)) || '';
+            const filterZipFirstThreeDigits = (zipcodeFilter && zipcodeFilter.toString().substring(0, 3)) || '';
+            return itemZipFirstThreeDigits === filterZipFirstThreeDigits;
+        });
     }
-
-    if (filteredItems.length > 0) {
-        showCards(filteredItems, filteredItems.length);
-    } else {
-        showCards(filteredItems, filteredItems.length);
+    
+    showCards(filteredItems, filteredItems.length);
+    if (filteredItems.length < 1) {
         showNoRecommendationsMessage();
     }
 }
@@ -182,14 +211,37 @@ function showNoRecommendationsMessage() {
     cardContainer.appendChild(emptyDiv);
 }
 
-function addToList(button) {
-    if (!button.classList.contains('blue-plus')) {
-        button.classList.add('blue-plus');
-        button.innerHTML = '&#x2713;';
+function addToList(button, index) {
+    if (!button.classList.contains('favorited')) {
+        button.classList.add('favorited');
+        items[index].add = true; // Set add property to true for the item
+        saves.push(items[index]); // Add the item to saves array
     } else {
-        button.classList.remove('blue-plus');
-        button.innerHTML = '&#x2b;'; 
+        button.classList.remove('favorited');
+        items[index].add = false; // Set add property to false for the item
+        const itemIndex = saves.findIndex(item => item.title === items[index].title);
+        if (itemIndex !== -1) {
+            saves.splice(itemIndex, 1);
+        }
     }
+}
+
+// Event listener for my favorites
+document.getElementById('my-favorites').addEventListener('click', (event) => {
+    showCards(saves, saves.length);
+    if (saves.length < 1) {
+        showNoFavoritesMessage(); 
+    }
+});
+
+// Function to display a message when there are no favorites
+function showNoFavoritesMessage() {
+    const cardContainer = document.getElementById("card-container");
+    cardContainer.innerHTML = ""; // Clear previous cards
+
+    const emptyDiv = document.querySelector(".empty-favorites").cloneNode(true);
+    emptyDiv.style.display = 'block';
+    cardContainer.appendChild(emptyDiv);
 }
 
 // Autoscroll

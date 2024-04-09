@@ -13,12 +13,12 @@
 <body>
     <section id = "top"></section>
     <header class="main-header">
-        <div class="saves"><a href="saves.html">My Saves</a></div>
+        <div class="favorites"><p id="my-favorites">&#x2605;&nbsp;Favorites</p></div>
         <h1><a href="index.html">Travel California</h1></a>
 
         <div class="filters" style="margin-top: 50px;">
             <select id="filter-dropdown">
-                <option value="all">Filter by: </option>
+                <option value="all">Filter by:</option>
                 <option value="f">Food & Drinks</option>
                 <option value="o">Outdoor Activities</option>
                 <option value="i">Indoor Activities</option>
@@ -31,7 +31,7 @@
     <div class="card" style="display: none;">
         <div class="card-content">
             <img src="" alt="">
-            <div class="title-container"><h2>Title</h2><span><button onclick="addToList(this)" id ="add">+</button></span></div>
+            <div class="title-container"><h2>Title</h2><span><button id="add">&#x2605;</button></span></div>
             <ul>
                 <li>Description</li>
                 <li>Address</li>
@@ -43,6 +43,11 @@
     <div class="empty" style="display: none;">
         <img src="sad.jpg" alt="sad">
         <p>No recommendations yet :c</p>
+    </div>
+
+    <div class="empty-favorites" style="display: none;">
+        <img src="sad2.jpg" alt="sad2">
+        <p>You haven't favorited anything yet :c</p>
     </div>
 
     <div class="navigation">
