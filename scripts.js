@@ -284,6 +284,7 @@ document.getElementById('my-favorites').addEventListener('click', (event) => {
     document.getElementById('favorites').classList.add('active');
     document.getElementById('filter-dropdown').value = 'all'; 
     document.getElementById('zipcode-search').value = '';
+    document.getElementById('favorites-heading').style.display = 'block';
     showCards(saves, saves.length);
     if (saves.length < 1) {
         showNoFavoritesMessage(); 
@@ -295,6 +296,7 @@ document.getElementById('home').addEventListener('click', (event) => {
     document.getElementById('favorites').classList.remove('active');
     document.getElementById('filter-dropdown').value = 'all'; 
     document.getElementById('zipcode-search').value = '';
+    document.getElementById('favorites-heading').style.display = 'none';
     showCards(items, 8);
 });
 
