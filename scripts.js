@@ -222,11 +222,11 @@ function filterItems(filter, zipcodeFilter) {
 
     if (zipcodeFilter && Number.isInteger(parseInt(zipcodeFilter))) {
         filteredItems = filteredItems.filter(item => {
-            const itemZipFirstThreeDigits = (item.zipcode && item.zipcode.toString().substring(0, 3)) || '';
-            const filterZipFirstThreeDigits = (zipcodeFilter && zipcodeFilter.toString().substring(0, 3)) || '';
-            return itemZipFirstThreeDigits === filterZipFirstThreeDigits;
+            const itemZip = (item.zipcode && item.zipcode.toString()) || '';
+            const filterZip = (zipcodeFilter && zipcodeFilter.toString()) || '';
+            return itemZip.includes(filterZip);
         });
-    }
+    }    
 
     showCards(filteredItems, filteredItems.length);
     if (filteredItems.length < 1) {
