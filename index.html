@@ -13,8 +13,8 @@
 <body>
     <section id = "top"></section>
     <header class="main-header">
-        <div class="favorites"><p id="my-favorites">&#x2605;&nbsp;Favorites</p></div>
-        <h1><a href="index.html">Travel California</h1></a>
+        <div class="favorites" id="favorites"><p id="my-favorites">&#x2605;&nbsp;Favorites</p></div>
+        <h1 id="home">Travel California</h1>
 
         <div class="filters" style="margin-top: 50px;">
             <select id="filter-dropdown">
@@ -48,14 +48,15 @@
     <div class="empty-favorites" style="display: none;">
         <img src="sad2.jpg" alt="sad2">
         <p>You haven't favorited anything yet :c</p>
+        <button onclick="recommendationAlert();" id="b2">Can't decide? Click here for a recommendation!</button>
     </div>
 
     <div class="navigation">
         <a href="#" id="show-more-link">Show more?</a>
-        <a href="#top">Back to Top</a>
+        <a href="#top" id="scroll-link">Back to Top</a>
     </div>
 
-    <footer></footer>
+    <footer><img src="Footer.png" alt="footer"></footer>
 
     <script src="scripts.js"></script>
 </body>

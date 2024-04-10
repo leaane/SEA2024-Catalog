@@ -82,7 +82,7 @@ let address = [
 let zipcode = [
     "90802", "91001", "93001", "91608", "92058", "91108", "90802", "91007",
     "93464", "90401", "91754", "91791", "92008", "90028", "94129", "90049",
-    "91723", "92252", "92315", "91105", "92802", "91001"
+    "91723", "92252", "92315", "91105", "92802", "91001", "91792", "91105"
 ];
 
 let type = [
@@ -100,8 +100,12 @@ let items = titles.map((title, index) => ({
     zipcode: zipcode[index],
     address: address[index],
     type: type[index],
-    add: false
+    favorite: false
 }));
+
+items.forEach((item, index) => {
+    item.id = index; 
+});
 
 let saves = [];
 
@@ -114,7 +118,7 @@ function showCards(dataArray, count) {
 
     for (let i = 0; i < count; i++) {      
         const nextCard = templateCard.cloneNode(true);
-        editCardContent(nextCard, dataArray[i].title, dataArray[i].url, dataArray[i].description, dataArray[i].address, dataArray[i].city, i);
+        editCardContent(nextCard, dataArray[i].title, dataArray[i].url, dataArray[i].description, dataArray[i].address, dataArray[i].city, dataArray[i].id);
         cardContainer.appendChild(nextCard);
     }
 
@@ -126,7 +130,7 @@ function showCards(dataArray, count) {
     }
 }
 
-function editCardContent(card, newTitle, newImageURL, newDescription, newAddress, newCity, index) {
+function editCardContent(card, newTitle, newImageURL, newDescription, newAddress, newCity, id) {
     card.style.display = "block";
 
     const cardHeader = card.querySelector("h2");
@@ -143,13 +147,13 @@ function editCardContent(card, newTitle, newImageURL, newDescription, newAddress
     addressElement.textContent = newAddress + ", " + newCity + ", CA";
 
     const favoriteButton = card.querySelector("#add");
-    if (items[index].add) {
-        favoriteButton.classList.add('favorited'); // Add .favorited class if the item is saved
+    if (items[id].favorite) {
+        favoriteButton.classList.add('favorited');
     } else {
         favoriteButton.classList.remove('favorited');
     }
     favoriteButton.onclick = function() {
-        addToList(this, index);
+        addToList(this, id);
     };
 }
 
@@ -160,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Event listener for the "Show more" link
 document.getElementById('show-more-link').addEventListener('click', (event) => {
-    event.preventDefault(); // Prevent the default action of the anchor tag
+    event.preventDefault(); 
     currentDisplayedCount += 8;
     showCards(items, currentDisplayedCount);
 });
@@ -179,9 +183,15 @@ document.getElementById('zipcode-search').addEventListener('input', (event) => {
     filterItems(selectedOption, zipcodeInput);
 });
 
-// Filter
+// Filtering
 function filterItems(filter, zipcodeFilter) {
-    let filteredItems = items;
+    let filteredItems = [];
+
+    if (document.getElementById('favorites').classList.contains('active')) {
+        filteredItems = saves;
+    } else {
+        filteredItems = items;
+    }
 
     if (filter !== "all") {
         filteredItems = filteredItems.filter(item => item.type === filter);
@@ -194,54 +204,92 @@ function filterItems(filter, zipcodeFilter) {
             return itemZipFirstThreeDigits === filterZipFirstThreeDigits;
         });
     }
-    
+
     showCards(filteredItems, filteredItems.length);
-    if (filteredItems.length < 1) {
-        showNoRecommendationsMessage();
+    if (filteredItems.length < 1 && document.getElementById('favorites').classList.contains('active')) {
+        showNoFavoritesMessage();
+    } else if (filteredItems.length < 1) {
+        showNoRecommendationsMessage
     }
 }
 
 // Function to display a message when there are no recommendations
 function showNoRecommendationsMessage() {
     const cardContainer = document.getElementById("card-container");
-    cardContainer.innerHTML = ""; // Clear previous cards
+    cardContainer.innerHTML = ""; 
 
     const emptyDiv = document.querySelector(".empty").cloneNode(true);
     emptyDiv.style.display = 'block';
     cardContainer.appendChild(emptyDiv);
+
+    document.getElementById('scroll-link').style.display = 'none';
 }
 
-function addToList(button, index) {
+// Favoriting 
+function addToList(button, id) {
+    const item = items.find(item => item.id === id);
     if (!button.classList.contains('favorited')) {
+        // Add the item to favorites
         button.classList.add('favorited');
-        items[index].add = true; // Set add property to true for the item
-        saves.push(items[index]); // Add the item to saves array
+        item.favorite = true; // Set favorite property to true for the item
+        saves.push(item); // Add the item to the saves array
     } else {
+        // Remove the item from favorites
         button.classList.remove('favorited');
-        items[index].add = false; // Set add property to false for the item
-        const itemIndex = saves.findIndex(item => item.title === items[index].title);
+        item.favorite = false; // Set favorite property to false for the item
+        
+        // Remove the item from the saves array if it exists
+        const itemIndex = saves.findIndex(item => item.id === id);
         if (itemIndex !== -1) {
             saves.splice(itemIndex, 1);
+        }
+
+        // Update the favorites display only if currently viewing favorites
+        if (document.getElementById('favorites').classList.contains('active')) {
+            showCards(saves, saves.length);
+            if (saves.length < 1) {
+                showNoFavoritesMessage(); 
+            }
         }
     }
 }
 
 // Event listener for my favorites
 document.getElementById('my-favorites').addEventListener('click', (event) => {
+    document.getElementById('favorites').classList.add('active');
     showCards(saves, saves.length);
     if (saves.length < 1) {
         showNoFavoritesMessage(); 
     }
 });
 
+// Event listener for home
+document.getElementById('home').addEventListener('click', (event) => {
+    document.getElementById('favorites').classList.remove('active');
+    showCards(items, 8);
+});
+
 // Function to display a message when there are no favorites
 function showNoFavoritesMessage() {
     const cardContainer = document.getElementById("card-container");
-    cardContainer.innerHTML = ""; // Clear previous cards
+    cardContainer.innerHTML = "";
 
     const emptyDiv = document.querySelector(".empty-favorites").cloneNode(true);
     emptyDiv.style.display = 'block';
     cardContainer.appendChild(emptyDiv);
+
+    document.getElementById('scroll-link').style.display = 'none';
+}
+
+function recommendationAlert() {
+    const randomIndex = Math.floor(Math.random() * items.length);
+    const randomItem = items[randomIndex];
+    const message = `
+        Visit ${randomItem.title}!
+        ${randomItem.description}
+        Address: ${randomItem.address}, ${randomItem.city}
+    `;
+    alert(message);
 }
 
 // Autoscroll
