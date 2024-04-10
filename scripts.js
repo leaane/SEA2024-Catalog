@@ -4,7 +4,9 @@ let titles = [
     "Ostrich Land", "Santa Monica Pier", "Little Skewer", "Miko's Boba Tea",
     "Legoland", "Escape Hotel", "Golden Gate Bridge", "The Getty Center",
     "Churro Boss", "Joshua Tree", "Big Bear Apline Slide", "Color Me Mine",
-    "Joe's Italian Ice", "Switzer Falls", "Laser Land", "Buca di Beppo"
+    "Joe's Italian Ice", "Switzer Falls", "Laser Land", "Buca di Beppo",
+    "White Water Rafting", "Gram Cafe", "Celebrity Helicopters", "Hangar 18", 
+    "K1 Speed", "Los Angeles Gun Club", "Snooze", "T-Swirl Crepe"
 ];
 
 let URLs = [
@@ -31,7 +33,15 @@ let URLs = [
     "https://joesice.com/wp-content/uploads/2019/09/FullSizeRender.jpeg",
     "https://westsidelosangeles.com/images/waterfall-hikes/switzer-falls/switzer-falls-3b.jpg",
     "https://avatars.mds.yandex.net/get-tycoon/6302170/2a000001880fd4ddb503813297d0884ed67d/priority-headline-background",
-    "https://www.bucadibeppo.com/wp-content/uploads/2023/01/CATERING_Images8.png"
+    "https://www.bucadibeppo.com/wp-content/uploads/2023/01/CATERING_Images8.png",
+    "https://www.americanwhitewater.com/wp-content/themes/awe/images/baner_1.png",
+    "https://i.redd.it/4u6x6vf5c5sa1.jpg",
+    "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/28/35/7c/5b/caption.jpg?w=1200&h=900&s=1", 
+    "https://climbhangar18.com/wp-content/uploads/2020/06/08.jpg",
+    "https://www.k1speed.com/wp-content/uploads/2024/01/FI-Autobahn-Acquisition.jpg",
+    "https://seeingtheworldinsteps.files.wordpress.com/2018/10/img_5536.jpg?w=750",
+    "https://www.snoozeeatery.com/wp-content/uploads/2019/09/Hillcrest_exterior.jpg",
+    "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/store/header/2cddfda7-419f-463e-9217-cbe1e4f439ca.jpg"
 ];
 
 let description = [
@@ -58,7 +68,15 @@ let description = [
     "Philadelphia style water ice made daily with real fresh fruit",
     "This hike takes you along a brook, historic ruins, and to a pristine waterfall",
     "Team up with friends and family for epic laser tag battles in immersive gameplay",
-    "Serves Italian, family-style meals in an eclectic group-friendly setting, perfect for celebrations"
+    "Serves Italian, family-style meals in an eclectic group-friendly setting, perfect for celebrations",
+    "The 3 Forks of the American River offer up some great whitewater rafting for everyone",
+    "Home of the original Japanese Soufflé Pancakes, handcrafted with natural ingredients",
+    "Curated tour that covers amazing locations from Santa Monica to the Hollywod Sign",
+    "Climbing gym with top ropes, auto belays, and 3 massive bouldering areas",
+    "Indoor racing center featuring electric go-karting for all skill levels, plus food",
+    "Longtime shooting range offering free safety and handling lessons, plus gun rentals",
+    "Vibrant, retro chain serving a seasonal menu of creative breakfast and lunch fare, plus cocktails",
+    "Each bite, no matter sweet or savory, is identical and bursting with fresh exquisite flavor"
 ];
 
 let city = [
@@ -67,7 +85,9 @@ let city = [
     "Solvang", "Santa Monica", "Monterey Park", "West Covina",
     "Carlsbad", "Los Angeles", "San Francisco", "Los Angeles",
     "Covina", "Joshua Tree", "Big Bear Lake", "Pasadena",
-    "Anaheim", "Altadena", "West Covina", "Pasadena"
+    "Anaheim", "Altadena", "West Covina", "Pasadena",
+    "Coloma", "Monterey Park", "Compton", "Arcadia",
+    "Burbank", "Los Angeles", "Orange", "Temple City"
 ];
 
 let address = [
@@ -76,20 +96,23 @@ let address = [
     "610 E Hwy 246", "200 Santa Monica Pier", "429 W Garvey Ave", "1416 S Azusa Ave #C2",
     "One Legoland Dr", "6633 Hollywood Blvd", "Golden Gate Brg", "1200 Getty Center Dr",
     "117 N Citrus Ave", "6554 Park Boulevard", "800 Wildrose Ln", "81 S Fair Oaks Ave",
-    "2201 S Harbor Blvd", "Switzer Picnic Area", "2340 S Azusa Ave", "80 W Green St"
+    "2201 S Harbor Blvd", "Switzer Picnic Area", "2340 S Azusa Ave", "80 W Green St",
+    "5981 New River Road", "500 N Atlantic Blvd Suite 179", "961 W Alondra Blvd", "305 N Santa Anita Ave",
+    "960 Chestnut S", "1375 E 6th St #7", "240 W Chapman Ave Suite 101", "5708 Rosemead Blvd #105"
 ];
 
 let zipcode = [
     "90802", "91001", "93001", "91608", "92058", "91108", "90802", "91007",
     "93464", "90401", "91754", "91791", "92008", "90028", "94129", "90049",
-    "91723", "92252", "92315", "91105", "92802", "91001", "91792", "91105"
+    "91723", "92252", "92315", "91105", "92802", "91001", "91792", "91105",
+    "95613", "91754", "90220", "91006", "91506", "90021", "92866", "91780"
 ];
 
 let type = [
     "o", "o", "o", "o", "o", "o", "i", "f",
     "o", "o", "f", "i", "o", "i", "o", "i",
     "f", "o", "o", "i", "f", "o", "i", "f",
-    
+    "o", "f", "o", "i", "i", "i", "f", "f"
 ];
 
 let items = titles.map((title, index) => ({
@@ -206,10 +229,12 @@ function filterItems(filter, zipcodeFilter) {
     }
 
     showCards(filteredItems, filteredItems.length);
-    if (filteredItems.length < 1 && document.getElementById('favorites').classList.contains('active')) {
-        showNoFavoritesMessage();
-    } else if (filteredItems.length < 1) {
-        showNoRecommendationsMessage
+    if (filteredItems.length < 1) {
+        if (document.getElementById('favorites').classList.contains('active')) {
+            showNoFavoritesMessage();
+        } else {
+            showNoRecommendationsMessage();
+        }
     }
 }
 
@@ -257,6 +282,8 @@ function addToList(button, id) {
 // Event listener for my favorites
 document.getElementById('my-favorites').addEventListener('click', (event) => {
     document.getElementById('favorites').classList.add('active');
+    document.getElementById('filter-dropdown').value = 'all'; 
+    document.getElementById('zipcode-search').value = '';
     showCards(saves, saves.length);
     if (saves.length < 1) {
         showNoFavoritesMessage(); 
@@ -266,8 +293,11 @@ document.getElementById('my-favorites').addEventListener('click', (event) => {
 // Event listener for home
 document.getElementById('home').addEventListener('click', (event) => {
     document.getElementById('favorites').classList.remove('active');
+    document.getElementById('filter-dropdown').value = 'all'; 
+    document.getElementById('zipcode-search').value = '';
     showCards(items, 8);
 });
+
 
 // Function to display a message when there are no favorites
 function showNoFavoritesMessage() {

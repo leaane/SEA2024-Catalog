@@ -9,14 +9,14 @@ a {
     color: white;
 }
 
-.favorites {
+#favorites {
     position: relative;
     top: 10px;
     margin-right: 15px;
     text-align: right;
 }
 
-.favorites a:hover {
+#favorites:hover {
     text-decoration: underline;
 }
 
