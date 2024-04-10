@@ -254,22 +254,18 @@ function showNoRecommendationsMessage() {
 function addToList(button, id) {
     const item = items.find(item => item.id === id);
     if (!button.classList.contains('favorited')) {
-        // Add the item to favorites
         button.classList.add('favorited');
-        item.favorite = true; // Set favorite property to true for the item
-        saves.push(item); // Add the item to the saves array
+        item.favorite = true; 
+        saves.push(item);
     } else {
-        // Remove the item from favorites
         button.classList.remove('favorited');
-        item.favorite = false; // Set favorite property to false for the item
+        item.favorite = false; 
         
-        // Remove the item from the saves array if it exists
         const itemIndex = saves.findIndex(item => item.id === id);
         if (itemIndex !== -1) {
             saves.splice(itemIndex, 1);
         }
 
-        // Update the favorites display only if currently viewing favorites
         if (document.getElementById('favorites').classList.contains('active')) {
             showCards(saves, saves.length);
             if (saves.length < 1) {
@@ -319,7 +315,7 @@ function recommendationAlert() {
     const message = `
         Visit ${randomItem.title}!
         ${randomItem.description}
-        Address: ${randomItem.address}, ${randomItem.city}
+        Address: ${randomItem.address}, ${randomItem.city}, CA
     `;
     alert(message);
 }
